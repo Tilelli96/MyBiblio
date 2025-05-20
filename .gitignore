@@ -5,8 +5,17 @@
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
-/var/
-/vendor/
+*.env*
+/app/bootstrap.php.cache
+/app/cache/*
+/app/logs/*
+/var/*
+/vendor/*
+/node_modules/*
+/public/assets/
+/public/uploads/
+
+/composer.phar
 ###< symfony/framework-bundle ###
 
 ###> phpunit/phpunit ###

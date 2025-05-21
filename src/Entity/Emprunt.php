@@ -20,7 +20,7 @@ class Emprunt
      * @var Collection<int, Livre>
      */
     #[ORM\OneToMany(targetEntity: Livre::class, mappedBy: 'emprunt')]
-    private Collection $livre;
+    private ?Collection $livre = null;
 
     #[ORM\ManyToOne(inversedBy: 'emprunts')]
     #[ORM\JoinColumn(nullable: false)]
@@ -48,12 +48,12 @@ class Emprunt
     /**
      * @return Collection<int, Livre>
      */
-    public function getLivre(): Collection
+    public function getLivre(): ?Collection
     {
         return $this->livre;
     }
 
-    public function addLivre(Livre $livre): static
+    public function addLivre(?Livre $livre): static
     {
         if (!$this->livre->contains($livre)) {
             $this->livre->add($livre);
@@ -63,7 +63,7 @@ class Emprunt
         return $this;
     }
 
-    public function removeLivre(Livre $livre): static
+    public function removeLivre(?Livre $livre): static
     {
         if ($this->livre->removeElement($livre)) {
             // set the owning side to null (unless already changed)

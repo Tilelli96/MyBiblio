@@ -30,7 +30,7 @@ class Emprunt
     private ?\DateTime $date_emprunt = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTime $date_retour = null;
+    private \DateTime $date_retour;
 
     #[ORM\Column(length: 50)]
     private ?string $statut = null;
@@ -99,7 +99,7 @@ class Emprunt
         return $this;
     }
 
-    public function getDateRetour(): ?\DateTime
+    public function getDateRetour(): \DateTime
     {
         return $this->date_retour;
     }

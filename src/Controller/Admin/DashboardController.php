@@ -7,6 +7,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
+use App\Entity\Utilisateur;
+use App\Entity\Livre;
+use App\Entity\Reservation;
+use App\Entity\Emprunt;
 
 #[AdminDashboard(routePath: '/gestion', routeName: 'gestion')]
 class DashboardController extends AbstractDashboardController
@@ -25,6 +29,11 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
+        yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-list', Utilisateur::class);
+        yield MenuItem::linkToCrud('Livres', 'fas fa-book', Livre::class);
+        yield MenuItem::linkToCrud('emprunts', 'fas fa-handshake', Emprunt::class);
+        yield MenuItem::linkToCrud('reservations', 'fas fa-handshake', Reservation::class);
+        yield MenuItem::linkToRoute('Application', 'fa fa-browser', 'app_login');
+        yield MenuItem::linkToLogout('Logout', 'fa fa-exit');
     }
 }

@@ -35,6 +35,11 @@ class Livre
     #[ORM\ManyToOne(inversedBy: 'livre')]
     private ?Reservation $reservation = null;
 
+    public function __toString(): string
+    {
+        return $this->titre ?? 'Livre inconnu';
+    }
+
     public function getId(): ?int
     {
         return $this->id;

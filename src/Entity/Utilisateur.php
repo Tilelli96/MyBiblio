@@ -50,6 +50,11 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         $this->emprunts = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->nom ?? 'Utilisateur inconnu';
+    }
+
     public function getId(): ?int
     {
         return $this->id;

@@ -22,7 +22,7 @@ final class LivreController extends AbstractController
         $auteur = $request->query->get('auteur');
 
         return $this->render('livre/index.html.twig', [
-            'livres' => $livreRepository->findAll(),
+            'livres' => $livreRepository->findByRecherche($categorie, $titre, $auteur),
         ]);
     }
 

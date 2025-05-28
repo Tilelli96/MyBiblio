@@ -34,6 +34,8 @@
         </tbody>
     </table>
 
+    <button><a href="{{ path('app_livre_reserver', {id: livre.id}) }}">Reserver</a></button>
+    <br>
     <a href="{{ path('app_livre_index') }}">back to list</a>
 
 {% endblock %}

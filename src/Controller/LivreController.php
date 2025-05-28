@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\Reservation;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 #[Route('/livre')]
 final class LivreController extends AbstractController
@@ -35,15 +36,17 @@ final class LivreController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/reserver', name: 'app_livre_reserve', methods: ['GET'])]
-    public function reserver(Livre $livre, EntityManager $em): Response
+    #[Route('/{id}/reserver', name: 'app_livre_reserver', methods: ['GET'])]
+    public function reserver(Livre $livre, EntityManagerInterface $em): Response
     {
         $reservation = new Reservation();
         $reservation->addLivre($livre);
         $reservation->setLecteur($this->getUser());
-        $reservation->setDateReservation(new DateTime("now"));
+        $reservation->setDateReservation(new \DateTime());
         $reservation->setStatut("en attente");
         $em->persist($reservation);
         $em->flush();
+        $this->addFlash('success', 'votre reservatin a bien été prise en compte');
+        return $this->redirectToRoute('app_livre_index');
     }
 }

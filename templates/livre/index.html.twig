@@ -3,6 +3,11 @@
 {% block title %}Livre index{% endblock %}
 
 {% block body %}
+    {% for message in app.flashes('success') %}
+        <div>
+            {{ message }}
+        </div>
+    {% endfor %}
     {% include "Recherche/recherche.html.twig" %}
 
     <table class="table">

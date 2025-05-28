@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Entity\Reservation;
 
 #[Route('/livre')]
 final class LivreController extends AbstractController
@@ -32,5 +33,17 @@ final class LivreController extends AbstractController
         return $this->render('livre/show.html.twig', [
             'livre' => $livre,
         ]);
+    }
+
+    #[Route('/{id}/reserver', name: 'app_livre_reserve', methods: ['GET'])]
+    public function reserver(Livre $livre, EntityManager $em): Response
+    {
+        $reservation = new Reservation();
+        $reservation->addLivre($livre);
+        $reservation->setLecteur($this->getUser());
+        $reservation->setDateReservation(new DateTime("now"));
+        $reservation->setStatut("en attente");
+        $em->persist($reservation);
+        $em->flush();
     }
 }

@@ -39,14 +39,22 @@ final class LivreController extends AbstractController
     #[Route('/{id}/reserver', name: 'app_livre_reserver', methods: ['GET'])]
     public function reserver(Livre $livre, EntityManagerInterface $em): Response
     {
-        $reservation = new Reservation();
-        $reservation->addLivre($livre);
-        $reservation->setLecteur($this->getUser());
-        $reservation->setDateReservation(new \DateTime());
-        $reservation->setStatut("en attente");
-        $em->persist($reservation);
-        $em->flush();
-        $this->addFlash('success', 'votre reservatin a bien été prise en compte');
-        return $this->redirectToRoute('app_livre_index');
+        if($livre->isDisponibilite())
+        {
+            $reservation = new Reservation();
+            $reservation->addLivre($livre);
+            $reservation->setLecteur($this->getUser());
+            $reservation->setDateReservation(new \DateTime());
+            $reservation->setStatut("en attente");
+            $livre->setDisponibilite(false);
+            $em->persist($reservation);
+            $em->flush();
+            $this->addFlash('success', 'votre reservatin a bien été prise en compte');
+            return $this->redirectToRoute('app_livre_index');
+        }else{
+            $this->addFlash('success', 'ce livre n\'est pas disponible');
+            return $this->redirectToRoute('app_livre_index');
+        }
+        
     }
 }

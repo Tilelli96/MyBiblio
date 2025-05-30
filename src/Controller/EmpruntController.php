@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Emprunt;
-use App\Form\EmpruntForm;
 use App\Repository\EmpruntRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,5 +28,23 @@ final class EmpruntController extends AbstractController
         return $this->render('emprunt/show.html.twig', [
             'emprunt' => $emprunt,
         ]);
+    }
+
+    #[Route('/retourner/{id}', name: 'retourner', methods: ['GET'])]
+    public function retourner(Emprunt $emprunt, EntityManagerInterface $em): Response
+    {
+        $emprunt->setStatut('retourné');
+        $emprunt->setDateRetour(new \DateTime());
+        $livres = $emprunt->getLivre();
+
+        foreach($livres as $livre)
+        {
+            $livre->setDisponibilite(true);
+        }
+
+        $em->persist($emprunt);
+        $em->flush();
+
+        return $this->redirectToRoute('app_emprunt_index');
     }
 }

@@ -17,8 +17,9 @@ final class EmpruntController extends AbstractController
     #[Route(name: 'app_emprunt_index', methods: ['GET'])]
     public function index(EmpruntRepository $empruntRepository): Response
     {
+        $emprunts = $empruntRepository->findByUser($this->getUser());
         return $this->render('emprunt/index.html.twig', [
-            'emprunts' => $empruntRepository->findAll(),
+            'emprunts' => $emprunts,
         ]);
     }
 

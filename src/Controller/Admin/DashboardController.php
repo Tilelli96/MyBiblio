@@ -12,7 +12,7 @@ use App\Entity\Livre;
 use App\Entity\Reservation;
 use App\Entity\Emprunt;
 
-#[AdminDashboard(routePath: '/gestion', routeName: 'gestion')]
+#[AdminDashboard(routePath: '/admin', routeName: 'admin')]
 class DashboardController extends AbstractDashboardController
 {
     public function index(): Response

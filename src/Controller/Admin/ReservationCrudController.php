@@ -13,6 +13,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 
 class ReservationCrudController extends AbstractCrudController
 {
@@ -34,10 +37,38 @@ class ReservationCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         $valider = Action::new('valider', 'Valider')
-        ->linkToCrudAction('validerReservation');
-
-    return $actions
-        ->add(Crud::PAGE_INDEX, $valider);
+            ->linkToCrudAction('validerReservation')
+            ->linkToCrudAction('validerReservation', function ($entity) {
+                return ['entityId' => $entity->getId()];
+                });
+        return $actions
+            ->add(Crud::PAGE_INDEX, $valider);
     }
+
+    #[Route('/admin/reservation/{id}/valider', name: 'admin_reservation_valider')]
+    public function validerReservation(AdminContext $context, EntityManagerInterface $em): Response
+    {
+        $entityId = $context->getRequest()->query->get('entityId');
+        $reservation = $em->getRepository(Reservation::class)->find($entityId);
+        $reservation->setStatut('Validée');
+        $em->persist($reservation);
+
+        $emprunt = new Emprunt();
+        $livres = $reservation->getLivre();
+        foreach ($livres as $livre)
+        {
+            $emprunt->addLivre($livre);
+        }
+        $emprunt->setLecteur($reservation->getLecteur());
+        $emprunt->setDateEmprunt($reservation->getDateReservation());
+        $emprunt->setStatut('en cours');
+        $em->persist($emprunt);
+
+        $em->flush();
+
+        //revenir à la page EasyAdmin précédente
+        return $this->redirect($context->getReferrer());
+    }
+
 
 }

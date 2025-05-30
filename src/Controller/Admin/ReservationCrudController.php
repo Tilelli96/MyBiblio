@@ -46,7 +46,7 @@ class ReservationCrudController extends AbstractCrudController
     }
 
     #[Route('/admin/reservation/{id}/valider', name: 'admin_reservation_valider')]
-    public function validerReservation(AdminContext $context, EntityManagerInterface $em): Response
+    public function validerReservation(AdminContext $context, EntityManagerInterface $em)
     {
         $entityId = $context->getRequest()->query->get('entityId');
         $reservation = $em->getRepository(Reservation::class)->find($entityId);
@@ -66,8 +66,7 @@ class ReservationCrudController extends AbstractCrudController
 
         $em->flush();
 
-        //revenir à la page EasyAdmin précédente
-        return $this->redirect($context->getReferrer());
+        return $this->redirectToRoute('admin');
     }
 
 
